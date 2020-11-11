@@ -4,8 +4,8 @@ import '../../style/style.less'
 class Page1 extends React.Component{
     render(){
         return(
-            <div>
-                <div className="page1">This is Page1!</div>
+            <div className='page1'>
+                <div className='hh'>This is Page1!</div>
             </div>
         );
     }
