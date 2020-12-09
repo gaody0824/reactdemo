@@ -1,24 +1,41 @@
 import React from 'react';
 // 从react-router-dom 包中导入Router和Route，BrowserRouter是Router中的一种
-import { BrowserRouter as Router,Route} from 'react-router-dom';
-// 下面依次引入各组件
-import Home from "./views/home/home";
-import Page1 from "./views/page1/page1";
+import {
+    BrowserRouter as Router,
+    Route,
+    Switch,
+    Redirect
+} from 'react-router-dom';
+// import { connect } from 'react-redux'
+import Routers from './route/routerMap'
 
-
-// Router只能有一个子组件，所以要把所有Route标签用一个div包裹起来
-// exact 默认不渲染Home组件
+// 404页面
+import NotFound from './views/not_found/not_found'
 
 class App extends React.Component {
+    constructor(props) {
+        super(props)
+    }
     render(){
         return(
             <Router >
-                <div>
-                    <Route path="/" exact component={Home} />
-                    <Route path="/Page1" component={Page1} />
-                </div>
+                <Switch>
+                    {Routers.map((item, index) => {
+                        return <Route key={index} path={item.path} exact render={(props) =>
+                            (!item.auth ? (<item.component {...props} />) :
+                                    (<Redirect to={{ pathname: '/', state: { from: props.location }}} />)
+                            )} />
+                   })}
+
+                   <Route component={NotFound} />
+                </Switch>
             </Router>
         )
     }
 }
+// // redux拿到token并挂载到App的props上面
+// const mapStateToProps = (state, ownProps) => {
+//     return { token: '1234' }
+// }
+
 export default App;
